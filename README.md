@@ -1,7 +1,8 @@
 ## ResearchTrack-I-Final-assignment
-## Farzin Sarvari (S5057724)
+---
+**Farzin Sarvari (S5057724)**
 
-Final assignment of Research Track 1
+**Final assignment of Research Track 1**
 ---
 ## how to running
 we are going to run ROS package nonholonomic_controlling by using 'gmapping' and 'final_assignment'(required by the CMake file).
