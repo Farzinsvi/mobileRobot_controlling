@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="PROJECT_NAME" value="nonholonomic_controlling"/>
+	<param name="xy_tolerance" type="double" value="0.5"/>
+	<rosparam command="load" file="$(find nonholonomic_controlling)/param/nonholonomic_params.yaml" />
+    
+    <node name="$(arg PROJECT_NAME)_gotopo_wllflw_redirect" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_gotopo_wllflw_redirect" output="screen"/>
+    <node name="$(arg PROJECT_NAME)_target_reached_detection" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_target_reached_detection" output="screen" />
+    
+    <node name="mux_cmdvel" pkg="topic_tools" type="mux" args="cmd_vel cmd_vel_move cmd_vel_bug cmd_vel_stop mux:=mux_cmdvel"/>
+  
+	<!-- Nodes and parameters performing the bug0 (and wall_follow) algorithm -->
+    <arg name="des_x" default= "-5.0"/> <!-- The first destination is actually the robot starting position in the environment /-->
+    <arg name="des_y" default= "8.0"/>  <!-- rather unelegantly copy-pasted by hand from the sim_gmapping launchfile. /-->
+                                        <!-- This step is necessary in case the first movement is performed using bug0, since the/-->
+                                        <!-- the code updates its stored destination values either at startup or when a target is /-->
+                                        <!-- reached. /-->
+    <param name="des_pos_x" value="$(arg des_x)" />
+    <param name="des_pos_y" value="$(arg des_y)" />
+    <node pkg="final_assignment" type="wall_follow_service_m.py" name="wall_follower">
+        <remap from="cmd_vel" to="cmd_vel_bug"/>
+    </node>
+    <node pkg="final_assignment" type="go_to_point_service_m.py" name="go_to_point">
+        <remap from="cmd_vel" to="cmd_vel_bug"/>
+    </node>
+    	
+	<node pkg="$(arg PROJECT_NAME)" type="bug_restart_service.py" name="bug_restart_service" required="true"/>
+	
+    <node pkg="final_assignment" type="bug_m.py" name="bug">
+        <remap from="user_interface" to="redirect_bug_user_interface"/>
+        <remap from="wall_follower_switch" to="wall_follower_switch_bug"/>
+        <remap from="go_to_point_switch" to="go_to_point_switch_bug"/>
+    </node>
+	
+	<!-- Nodes and parameters performing the move_base algorithm -->
+	<node pkg="move_base" type="move_base" name="move_base">
+        <rosparam file="$(find final_assignment)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+        <rosparam file="$(find final_assignment)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+        <rosparam file="$(find final_assignment)/param/local_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find final_assignment)/param/global_costmap_params.yaml" command="load"/>
+        <rosparam file="$(find final_assignment)/param/base_local_planner_params.yaml" command="load"/>
+        <rosparam file="$(find final_assignment)/param/move_base_params.yaml" command="load"/>
+        <remap from="cmd_vel" to="cmd_vel_move"/>
+    </node>
+  
+   <!-- The nodes of the overall control part, implemented in this package -->
+    
+    <node name="$(arg PROJECT_NAME)_unreachable_target_detection" pkg="nonholo_control" type="$(arg PROJECT_NAME)_unreachable_target_detection" output="screen"/>
+
+    <!-- User interface removed allowing for it to be run in a separate shell, avoid cluttering it with log messages /-->
+	<!--node name="$(arg PROJECT_NAME)_user_interface" pkg="nonholo_control" type="$(arg PROJECT_NAME)_user_interface" required="true" output="screen"/-->
+	
+	<node name="$(arg PROJECT_NAME)_robot_mainframe" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_robot_mainframe" required="true" output="screen">
+        <remap from="wall_follower_switch" to="wall_follower_switch_nhc"/>
+        <remap from="go_to_point_switch" to="go_to_point_switch_nhc"/>
+	</node>
+	
+</launch>

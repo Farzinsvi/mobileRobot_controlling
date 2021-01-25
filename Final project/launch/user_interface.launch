@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="PROJECT_NAME" value="nonholonomic_controlling"/>
+    <!-- 'avoid_duplicates' is used by the randomposition_server to know wheter it's allowed to have the same random goal picked twice in a row /-->
+	<arg name="avoid_duplicates" value="true"/>
+    
+    <node name="$(arg PROJECT_NAME)_random_position_server" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_random_position_server"  
+	      args="$(arg avoid_duplicates)"/>
+	<node name="$(arg PROJECT_NAME)_user_position_server" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_user_position_server" output="screen"/>
+	<node name="$(arg PROJECT_NAME)_user_interface" pkg="$(arg PROJECT_NAME)" type="$(arg PROJECT_NAME)_user_interface" required="true"  output="screen" />
+	
+</launch>
