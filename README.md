@@ -24,4 +24,4 @@ Our robot, can move around the environment, going towards one of the 6 targets c
 behaviour has been implemented, having the robot fall back to the previous target using the **'move_base'**
 algorithm in case more than some minutes pass from the definition of a target and its achievement. While the robot is trying to reach a target, distance between the two are printed on screen enabling the tracking of the system.
 
-## Please notice that this is a quick description, a more explanation is included inside each script.
+**Please notice that this is a quick description, a more explanation is included inside each script.**
