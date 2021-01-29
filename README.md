@@ -22,23 +22,23 @@ to run both **rviz** and **Gazebo**.
 
 ## Content description
 The content of the package is the following:
- CMakeLists.txt: the cmake file of the package
- map_library.h: header file for functions
- nonholonomic_controlling.launch: one of the two launch files regarding to the package, contains the definition of the nodes that relate to the part of computation.
- user_interface.launch: the other launch file, it is defined the nodes that interface with the user and will be run separately from the one and printing on screen the position of the robot.
- package.xml: the XML file describing package requisites.
- nonholo_params.yaml: parameter file including variables shared between all the nodes.
- bug_restart_service.py: python script that invokes roslaunch API to launch.
- gotopo_wllflw_redirect.cpp: a ServiceServer that forwards service calls for 'go_to_point_switch' and 'wall_follower_switch', directed in the launch file.
- map_library.cpp: the executable for the library.
- random_position_server.cpp: a ServiceServer generating a random target position between the valid ones.
- robot_mainframe.cpp: the central node, it brings all tasks performed by other nodes.
- target_reached_detection.cpp: a message Publisher that sends a message each time when target is received.
- unreachable_target_detection.cpp: when the robot is stuck and cannot reach its defined target, publishing a message on a specific topic in that case.
- user_interface.cpp: representing the list of commands that can be issued to the robot.
- user_position_server.cpp: similar to random_position_server.cpp, the position here is asked to the user.
- TargetPos.srv: a service structure defining the target position of robot.
- UIMenu.srv: a service structure defining the user choice inserted in the UI.
+**CMakeLists.txt:** the cmake file of the package
+**map_library.h:** header file for functions
+**nonholonomic_controlling.launch:** one of the two launch files regarding to the package, contains the definition of the nodes that relate to the part of computation.
+**user_interface.launch:** the other launch file, it is defined the nodes that interface with the user and will be run separately from the one and printing on screen the position of the robot.
+**package.xml:** the XML file describing package requisites.
+**nonholo_params.yaml:** parameter file including variables shared between all the nodes.
+**bug_restart_service.py:** python script that invokes roslaunch API to launch.
+**gotopo_wllflw_redirect.cpp:** a ServiceServer that forwards service calls for 'go_to_point_switch' and 'wall_follower_switch', directed in the launch file.
+**map_library.cpp:** the executable for the library.
+**random_position_server.cpp:** a ServiceServer generating a random target position between the valid ones.
+**robot_mainframe.cpp:** the central node, it brings all tasks performed by other nodes.
+**target_reached_detection.cpp:** a message Publisher that sends a message each time when target is received.
+**unreachable_target_detection.cpp:** when the robot is stuck and cannot reach its defined target, publishing a message on a specific topic in that case.
+**user_interface.cpp:** representing the list of commands that can be issued to the robot.
+**user_position_server.cpp:** similar to random_position_server.cpp, the position here is asked to the user.
+**TargetPos.srv:** a service structure defining the target position of robot.
+**UIMenu.srv:** a service structure defining the user choice inserted in the UI.
 
 ---
 ## Robot behaviour
